@@ -44,7 +44,8 @@ public class Lc_46_permutation {
 		}
 	}
 	//will work for positive and negative case
-	/*public void permuteRec(int[] nums, int begin, List<List<Integer>> result) {
+	/*public void permuteRec(int[] nums,
+	 *  int begin, List<List<Integer>> result) {
         if (begin == nums.length) {
             List<Integer> temp = new ArrayList<Integer>();
             for (int num : nums) temp.add(num);
