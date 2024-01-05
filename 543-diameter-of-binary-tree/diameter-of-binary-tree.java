@@ -29,6 +29,7 @@ private:
         return 1 + max(lh, rh);
     }*/
 class Solution {
+    //pass by reference
     public int diameterOfBinaryTree(TreeNode root) {
         int dai[]=new int[1];
         helper(root,dai);
