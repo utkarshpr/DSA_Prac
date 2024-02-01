@@ -55,10 +55,10 @@ class Solution {
 		if(sum!=0)
 		{
 			c++;
-			if(sum<=mid)
-				sum=0;
-			else
-				c++;
+			// if(sum<=mid)
+			// 	sum=0;
+			// else
+			// 	c++;
 		}
 		return c<=days;
 		
