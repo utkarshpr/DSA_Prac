@@ -1,23 +1,23 @@
 class Solution {
     public List<Integer> sequentialDigits(int low, int high) {
-        List<Integer> list=new ArrayList<>();
-		fun(low,high,0,list,1,1);
-        Collections.sort(list);
-        return list;
+        List<Integer> result = new ArrayList<>();
+        for (int i = 1; i <= 9; i++) {
+            generateSequentialDigits(low, high, i, result);
+        }
+        result.sort(null);
+        return result;
     }
-    public static void fun(int low,int high,int val,List<Integer> list,int start,int index){
-        if(index>9){
-            return;
+
+    private static void generateSequentialDigits(int low, int high, int current, List<Integer> result) {
+        if (current >= low && current <= high) {
+            result.add(current);
         }
-        if(start>10){
-            index=index+1;
-            start=index;
-            val=0;
+
+        if (current % 10 < 9) {
+            int nextDigit = current * 10 + (current % 10) + 1;
+            if (nextDigit <= high) {
+                generateSequentialDigits(low, high, nextDigit, result);
+            }
         }
-        if(val>=low && val<=high){
-            list.add(val);
-        }
-        val=val*10+start;
-        fun(low,high,val,list,start+1,index);
     }
 }
