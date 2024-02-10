@@ -1,31 +1,30 @@
 class Solution {
-    public List<List<Integer>> threeSum(int[] nums) {
-        List<List<Integer>>  ans=new ArrayList<>();
-        Arrays.sort(nums);
-        for(int i=0;i<nums.length;i++)
+    public List<List<Integer>> threeSum(int[] ar) {
+         List<List<Integer>>  ans=new ArrayList<>();
+        Arrays.sort(ar);
+        for(int i=0;i<ar.length;i++)
         {
-            if(i>0 && nums[i-1]==nums[i])
-            {
+            if(i>0 && ar[i]==ar[i-1]){
                 continue;
             }
-            int l=i+1;
-            int r=nums.length-1;
-            int t=-nums[i];
-            while(l<r)
-            {
-                if(nums[l]+nums[r]==t)
-                {
-                    ans.add(Arrays.asList(nums[i], nums[l], nums[r]));l++;
-                    r--;
-                    while(l<r && nums[l]==nums[l-1])l++;
-					while(l<r && nums[r]==nums[r+1])r--;
+            int target=-ar[i];
+            int j=i+1;
+            int k=ar.length-1;
+            while(j<k){
+                if(ar[j]+ar[k] ==  target){
+                    ans.add(Arrays.asList(ar[i], ar[j], ar[k]));
+                    j++;
+                    k--;
+                    //System.out.println(ans);
+                    while(j<k && ar[j]==ar[j-1])j++;
+                    while(j<k && ar[k]==ar[k+1])k--;
                 }
-                else if(nums[l] + nums[r] > t)
-                {
-                    r--;
+                else if(ar[j]+ar[k] < target){
+                    j++;
                 }
-                else 
-                l++;
+                else{
+                    k--;
+                }
             }
         }
         return ans;
