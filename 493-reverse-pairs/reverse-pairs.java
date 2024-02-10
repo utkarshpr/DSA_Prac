@@ -1,57 +1,68 @@
-import java.util.Arrays;
-
 class Solution {
-    public int reversePairs(int[] nums) {
-        int[] copy = Arrays.copyOf(nums, nums.length);
-        return mergeSort(nums, copy, 0, nums.length - 1);
+    public int reversePairs(int[] a) {
+      return mergeSort(a,0, a.length - 1);
     }
 
-    private int mergeSort(int[] nums, int[] copy, int low, int high) {
-        if (low >= high) return 0;
-
-        int mid = low + (high - low) / 2;
-        int count = mergeSort(nums, copy, low, mid) + mergeSort(nums, copy, mid + 1, high);
-        count += merge(nums, copy, low, mid, high);
-        return count;
+    /**
+     * @param arr
+     * @param low
+     * @param high
+     * @return
+     */
+    private static int mergeSort(int[] arr, int low, int high) {
+        int cnt = 0;
+        if (low >= high) return cnt;
+        int mid = (low + high) / 2 ;
+        cnt += mergeSort(arr, low, mid);  // left half
+        cnt += mergeSort(arr, mid + 1, high); // right half
+        cnt += merge(arr, low, mid, high);  // merging sorted halves
+        return cnt;
     }
 
-    private int merge(int[] nums, int[] copy, int low, int mid, int high) {
-        int count = 0;
-        int left = low;
-        int right = mid + 1;
-        int index = low;
+    private static int merge(int[] arr, int low, int mid, int high) {
+        ArrayList<Integer> temp = new ArrayList<>(); // temporary array
+        int left = low;      // starting index of left half of arr
+        int right = mid + 1;   // starting index of right half of arr
 
-        while (left <= mid && right <= high) {
-            if ((long) nums[left] <= 2L * nums[right]) {
+        //Modification 1: cnt variable to count the pairs:
+        int cnt = 0;
+        while(left<=mid && right<=high){
+            if ((long) arr[left] <= 2L * arr[right]) {
                 left++;
             } else {
-                count += mid - left + 1;
+                cnt += mid - left + 1;
                 right++;
             }
         }
+         left = low;      // starting index of left half of arr
+         right = mid + 1;  
+        while(left<=mid && right<=high){
+            if(arr[left] < arr[right]){
+                temp.add(arr[left]);
+                left++;
 
-        left = low;
-        right = mid + 1;
-
-        while (left <= mid && right <= high) {
-            if (nums[left] <= nums[right]) {
-                copy[index++] = nums[left++];
-            } else {
-                copy[index++] = nums[right++];
+            }
+            else{
+               // cnt+=(mid - left + 1); 
+                temp.add(arr[right]);
+                right++;
             }
         }
-
         while (left <= mid) {
-            copy[index++] = nums[left++];
+            temp.add(arr[left]);
+            left++;
         }
-
         while (right <= high) {
-            copy[index++] = nums[right++];
+            temp.add(arr[right]);
+            right++;
+        }
+        for (int i = low; i <= high; i++) {
+            arr[i] = temp.get(i - low);
         }
 
-        System.arraycopy(copy, low, nums, low, high - low + 1);
 
-        return count;
+        return cnt;
     }
-}
 
+   
+}
