@@ -1,36 +1,56 @@
 class Solution {
-    public int minFallingPathSum(int[][] A) {
-        int n = A.length;
-        int ans = Integer.MAX_VALUE;
-        int[][] dp = new int[n][n];
-        
-        for (int i = 0; i < n; i++) {
-            dp[0][i] = A[0][i];
+    public int minFallingPathSum(int[][] matrix) {
+         int dp[][] = new int[matrix.length][matrix[0].length];
+        for (int row[] : dp)
+            Arrays.fill(row, -1);
+
+          for (int j = 0; j < matrix[0].length; j++) {
+            dp[0][j] = matrix[0][j];
+
         }
-        
-        int down = Integer.MAX_VALUE, left = Integer.MAX_VALUE, right = Integer.MAX_VALUE;
-        for(int row = 1; row < n; row++) {
-            for(int col = 0; col < n; col++) {
-                down = dp[row - 1][col];
-                if(col == 0) {
-                    right = dp[row - 1][col + 1];
-                    dp[row][col] = A[row][col] + Math.min(down, right);
+        int maxi = Integer.MAX_VALUE;
+        int n = matrix.length;
+        int m = matrix[0].length;
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                int up = matrix[i][j] + dp[i - 1][j];
+
+                int leftDiagonal = matrix[i][j];
+                if (j - 1 >= 0) {
+                    leftDiagonal += dp[i - 1][j - 1];
+                } else {
+                    leftDiagonal += (int) Math.pow(10, 9);
                 }
-                else if (col == n - 1) {
-                    left = dp[row - 1][col - 1];
-                    dp[row][col] = A[row][col] + Math.min(down, left);
+
+                int rightDiagonal = matrix[i][j];
+                if (j + 1 < m) {
+                    rightDiagonal += dp[i - 1][j + 1];
+                } else {
+                    rightDiagonal += (int) Math.pow(10, 9);
                 }
-                else {
-                    left = dp[row - 1][col - 1];
-                    right = dp[row - 1][col + 1];
-                    dp[row][col] = A[row][col] + Math.min(down, Math.min(left, right));
-                }
+
+                // Store the maximum of the three paths in dp
+                dp[i][j] = Math.min(up, Math.min(leftDiagonal, rightDiagonal));
             }
         }
+        for (int j = 0; j < m; j++) {
+            maxi = Math.min(maxi, dp[n - 1][j]);
+        }
 
-        for(int col = 0; col < n; col++)
-            ans = Math.min(ans, dp[n - 1][col]);
         
-        return ans;
-    }        
+        return maxi; 
+    }
+
+    private static int getMaxUtil(int i, int j,  int[][] matrix,int [][]dp) {
+        if(j<0 || j>matrix[0].length-1)
+            return (int)1e9;
+        if(i==0)
+            return dp[i][j]=matrix[i][j];
+            if(dp[i][j]!=-1)
+                return dp[i][j];
+        int up=matrix[i][j]+getMaxUtil(i-1, j, matrix,dp);
+        int leftDiagonal=matrix[i][j]+getMaxUtil(i-1, j-1, matrix,dp);
+        int rightDiagonal=matrix[i][j]+getMaxUtil(i-1, j+1, matrix,dp);
+        return dp[i][j]=Math.min(up, Math.min(leftDiagonal, rightDiagonal));
+    }
 }
