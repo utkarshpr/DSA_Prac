@@ -1,23 +1,23 @@
 class Solution {
     public int maxProfit(int[] Arr) {
         int n=Arr.length;
-     int dp[][]=new int[n][2];
-        for(int x[]:dp)
-            Arrays.fill(x, -1);
-        return helper(Arr,0,0,dp);
-    }
+        int profit = 0;
+    int dp[][] = new int[n + 1][2 + 1];
+    dp[n][0] = dp[n][1] = 0;
+    for (int ind = n - 1; ind >= 0; ind--) {
+        for (int buy = 0; buy <= 1; buy++) {
+            if (buy == 0) { // We can buy the stock
+                profit = Math.max(0 + dp[ind + 1][0], -Arr[ind] + dp[ind + 1][1]);
+            }
 
-    private static int helper(int[] Arr, int n, int _buy,int dp[][]) {
-        if(n>=Arr.length)
-            return 0;
-        int profit;  
-        if(dp[n][_buy]!=-1) return dp[n][_buy] ; 
-        if(_buy == 0){
-            profit=Math.max(-Arr[n]+helper(Arr, n+1, 1,dp), 0+helper(Arr, n+1, 0,dp));
-        }   
-        else{
-            profit=Math.max(Arr[n]+helper(Arr, n+1,0,dp),0+helper(Arr, n+1, 1,dp));
-        } 
-        return dp[n][_buy]=profit;
+            if (buy == 1) { // We can sell the stock
+                profit = Math.max(0 + dp[ind + 1][1], Arr[ind] + dp[ind + 1][0]);
+            }
+
+            dp[ind][buy] = profit;
+      }
     }
+    // return helper(Arr,0,0,dp);
+    return dp[0][0];
+  }
 }
